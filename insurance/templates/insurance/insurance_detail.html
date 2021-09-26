@@ -1,0 +1,68 @@
+{% extends "insurance/base.html" %}
+{% block content %}
+    
+      <div class="d-flex justify-content-center" style="margin: 5px;">
+          <div class="card" style="min-width: 500px;">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-6 float-left">
+                  <b> Policy Id : {{ insurance.policy_id }}</b>
+                </div>
+                <div class="col-md-6 float-right">
+                  <h2><a class="btn text-white" style="float: right; background-color: #3F7B96;" href="{% url 'insurance-update' insurance.policy_id %}">Edit</a></h2>
+                </div>
+              </div>
+             
+
+              <h1 class="text-center">{{ insurance.premium }}</h1>
+              <div class="row">
+                <table class="col-md-6 table table-bordered">
+                  <thead>
+                    <tr>
+                      <th>Fuel</th>
+                      <th>Vehicle Segment</th>
+                      <th>bodily_injury_liability</th>
+                      <th>personal_injury_protection</th>  
+                      <th>property_damage_liability</th>
+                      <th>collision</th>
+                      <th>comprehensive</th>
+                    </tr>
+                    <tr>
+                      <td>{{ insurance.fuel }}</td>
+                      <td>{{ insurance.vehicle_segment }}</td>
+                      <td>{{ insurance.bodily_injury_liability }}</td>
+                      <td>{{ insurance.personal_injury_protection }}</td>
+                      <td>{{ insurance.property_damage_liability }}</td>
+                      <td>{{ insurance.collision }}</td>
+                      <td>{{ insurance.comprehensive }}</td>
+                    </tr>
+                  </thead>
+                </table>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+
+        <hr/>
+        
+        <div class="row">
+          <div class="col-md-12">
+            <div class="row">
+              <div class="col-md-6">
+                <h1>Customers List</h1>
+              </div>
+              <div class="col-md-6">
+                <form action="{% url 'insurance-cust-search' insurance.policy_id %}" method="get">
+                  <div class="input-group mb-6">
+                    <input class="form-control" name="q" type="text" placeholder="Search ...">
+                  </div>
+                </form>
+              </div>
+
+            </div>
+            
+            {% include "insurance/filtered_customer.html" %}
+          </div>
+        </div> 
+{% endblock content%}

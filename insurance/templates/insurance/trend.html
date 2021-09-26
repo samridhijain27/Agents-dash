@@ -1,0 +1,62 @@
+{% extends "insurance/base.html" %}
+{% block content %}
+    <form action="{% url 'insurance-trend-view' %}" method="post">
+        {% csrf_token %}
+        <select class="form-select" id="selectedyear" name='yearDropDown'>
+            <option selected="selected" disabled>Select Year </option>
+            <option value="2018">2018</option>
+            <option value="2019">2019</option>
+            <option value="2020">2020</option>
+            <option value="2021">2021</option>
+        </select>
+        <br>
+        <input type="submit" class="btn btn-success float-right" value="Select">
+    </form>
+
+  <div id="container" style="width: 75%;" class="justify-content-center">
+    <canvas id="insurance-chart" data-url="{% url 'insurance-trend' selected_year %}"></canvas>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+  <script>
+    $(function () {
+
+      var $insuranceChart = $("#insurance-chart");
+      $.ajax({
+        url: $insuranceChart.data("url"),
+        success: function (data) {
+
+          var ctx = $insuranceChart[0].getContext("2d");
+
+          new Chart(ctx, {
+            type: 'line',
+            data: {
+              labels: data.labels,
+              datasets: [{
+                label: data.month,
+                backgroundColor: '#1bcdcd',
+                data: data.data
+                
+              }]          
+            },
+            options: {
+              responsive: true,
+              legend: {
+                position: 'top',
+              },
+              title: {
+                display: true,
+                text: 'insurance Bar Chart'
+              }
+            }
+          });
+          console.log(data);
+        }
+      });
+
+    });
+
+  </script>
+
+{% endblock %}

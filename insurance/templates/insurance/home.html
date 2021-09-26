@@ -1,0 +1,92 @@
+{% extends "insurance/base.html" %}
+{% block content %}
+<style>
+  .insurance_pagination {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    color: white;
+    text-align: center;
+ }
+</style>
+
+<div class="px-4 pt-5 my-5 text-center border-bottom">
+  <h1 class="display-4 fw-bold">Agents Dashboard</h1>
+  <div class="col-lg-6 mx-auto">
+    <!-- <p class="lead mb-4">Simple utility to search and edit your data at one-place.</p> -->
+    <div class="d-grid gap-2 d-sm-flex justify-content-sm-center mb-5">
+      <button type="button" class="btn btn-primary btn-lg px-4 me-sm-3">Search by Policy ID</button>
+      <button type="button" class="btn btn-outline-secondary btn-lg px-4">Search by Customer ID</button>
+    </div>
+  </div>
+  <div class="overflow-hidden" style="max-height: 30vh;">
+    <div class="container px-5">
+      <!-- Search form -->
+    <form action="{% url 'search_results' %}" method="get">
+    <div class="active-purple-3 active-purple-4 mb-4">
+      <input class="form-control" type="text" name="q" type="text" placeholder="Search" aria-label="Search">   
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+    <div class = "row">
+        {% for insurance in insurances %}
+            <div class="col-md-3" style="margin: 5px;">
+                <div class="card">
+                  <div class="card-body">
+                    <b> Policy Id : {{ insurance.policy_id }}</b>
+                    <h1 class="text-center">{{ insurance.premium }}</h1>
+                   <p class="card-text">Claimed by - {{ insurance.customers.count }} Customers.</p>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h2><a class="btn text-white" style="float: right; background-color: #3F7B96;" href="{% url 'insurance-detail' insurance.policy_id %}">Read More ...</a></h2>
+                        </div>
+                    </div>
+                    
+                  </div>
+                </div>
+              </div>
+        {% empty %}
+        <p>No insurances here yet :(</p>
+        {% endfor %}
+    </div>
+    {% if is_paginated %}
+    <div class="insurance_pagination col-md-12">
+      <ul class="pagination justify-content-center">
+
+        {% if page_obj.has_previous %}
+          <li page-item><a  class="page-link" href="?page={{ page_obj.previous_page_number }}">&laquo;</a></li>
+        {% else %}
+          <li class="page-item disabled"><span class="page-link">&laquo;</span></li>
+        {% endif %}
+        
+        {% if page_obj.number|add:'-4' > 1 %}
+            <li><a class="page-link" href="?page={{ page_obj.number|add:'-5' }}">&hellip;</a></li>
+        {% endif %}
+        
+        {% for i in page_obj.paginator.page_range %}
+            {% if page_obj.number == i %}
+            <li class="page-item active"><span class="page-link">{{ i }} <span class="sr-only">(current)</span></span></li>
+            {% elif i > page_obj.number|add:'-5' and i < page_obj.number|add:'5' %}
+                <li page-item><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+            {% endif %}
+        {% endfor %}
+        
+        {% if page_obj.paginator.num_pages > page_obj.number|add:'4' %}
+
+            <li><a class="page-link" href="?page={{ page_obj.number|add:'5' }}">&hellip;</a></li>
+        {% endif %}
+        
+        {% if page_obj.has_next %}
+            <li page-item><a class="page-link" href="?page={{ page_obj.next_page_number }}">&raquo;</a></li>
+        {% else %}
+            <li class="disabled"><span><i class="fa fa-chevron-right page-item" aria-hidden="true"></i></span></li>
+        {% endif %}
+        
+        </ul>
+      </div>
+    {% endif %}
+{% endblock content%}

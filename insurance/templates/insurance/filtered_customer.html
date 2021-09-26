@@ -1,0 +1,33 @@
+<table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>Id</th>
+        <th>Gender</th>
+        <th>Income Group</th>
+        <th>Region</th>
+        <th>Martial Status</th>
+        <th>Purchase Date</th>
+        <th>All Policies</th>
+      </tr>
+    </thead>
+    <tbody>
+  
+    {% for customer in customers %}
+    <a href="{% url 'cust-insurance-list' customer.customer_id %}">
+    <tr>
+      <td>{{ customer.customer_id }}</td>
+      <td>{{ customer.customer.customer_gender }}</td>
+      <td>{{ customer.customer.customer_income_group }}</td>
+      <td>{{ customer.customer.customer_region }}</td>
+      <td>{{ customer.customer.customer_marital_status }}</td>
+      <td>{{ customer.date_of_purchase }}</td>
+      <td>
+        <h2><a class="btn btn-warning text-white" style="float: right; background-color: #3F7B96;" href="{% url 'cust-insurance-list' customer.customer_id %}">...</a></h2>
+      </td>
+    </tr>
+  </a>
+    {% empty %}
+    <p>No Customers Found :(</p>
+    {% endfor %}
+  </tbody>
+  </table>

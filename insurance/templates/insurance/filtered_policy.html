@@ -1,0 +1,44 @@
+{% extends "insurance/base.html" %}
+{% block content %}
+
+    <div class = "row">
+      <h1>Policy List for Customer - {{ customer_id }} </h1>
+      <br/><br/>
+        {% for insurance in insurances %}
+            <div class="col-md-3" style="margin: 5px;">
+                <div class="card">
+                  <div class="card-body">
+                    <b> Policy Id : {{ insurance.insurance.policy_id }}</b>
+                    <h1 class="text-center">{{ insurance.insurance.premium }}</h1>
+                    <!-- <p class="card-text">Claimed by - {{ insurance.insurance.customers.count }} Customers.</p> -->
+                    
+                    
+                  </div>
+                </div>
+              </div>
+        {% empty %}
+        <p>No insurances here yet :(</p>
+        {% endfor %}
+    </div>
+    {% if is_paginated %}
+  <ul class="pagination justify-content-center">
+    {% if page_obj.has_previous %}
+      <li page-item><a  class="page-link" href="?page={{ page_obj.previous_page_number }}">&laquo;</a></li>
+    {% else %}
+      <li class="page-item disabled"><span class="page-link">&laquo;</span></li>
+    {% endif %}
+    {% for i in paginator.page_range %}
+      {% if page_obj.number == i %}
+        <li class="page-item active"><span class="page-link">{{ i }} <span class="sr-only">(current)</span></span></li>
+      {% else %}
+        <li page-item><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+      {% endif %}
+    {% endfor %}
+    {% if page_obj.has_next %}
+      <li page-item><a class="page-link" href="?page={{ page_obj.next_page_number }}">&raquo;</a></li>
+    {% else %}
+      <li class="page-item disabled"><span class="page-link">&raquo;</span></li>
+    {% endif %}
+  </ul>
+{% endif %}
+{% endblock content%}
